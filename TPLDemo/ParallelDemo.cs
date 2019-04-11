@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -94,6 +95,10 @@ namespace TPLDemo
             }
             catch (OperationCanceledException ex) when (ex != null)
             {
+            }
+            catch (AggregateException ea) when (ea.InnerExceptions.Count > 0)
+            {
+                Helper.Print(string.Join("\n", ea.Flatten().InnerExceptions.Select(inex => inex.Message)));
             }
             finally
             {
