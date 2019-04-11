@@ -22,7 +22,7 @@ namespace TPLDemo
                 Helper.Print(model.Name);
             });
             Helper.PrintSplit();
-            
+
             // 延时后自动取消并行操作，注意产生 OperationCanceledException
             CancellationTokenSource cancellation = new CancellationTokenSource(TimeSpan.FromMilliseconds(99999));
             var options = new ParallelOptions()
@@ -97,6 +97,18 @@ namespace TPLDemo
                 new Action(()=>{ Helper.Print("9"); }),
                 new Action(()=>{ Helper.Print("10"); }),
             });
+            Helper.PrintSplit();
+
+            int count = 0;
+            Parallel.ForEach(
+                models,
+                // 初始化线程变量
+                () => 0,
+                // 迭代方法仅操作本线程的变量
+                (model, state, subCount) => subCount += model.Index,
+                // 线程结束后合并本线程变量到总变量
+                (subCount) => Interlocked.Add(ref count, subCount));
+            Helper.Print(count.ToString());
         }
     }
 }
