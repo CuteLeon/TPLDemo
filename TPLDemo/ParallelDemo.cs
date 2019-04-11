@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -133,6 +134,14 @@ namespace TPLDemo
                 // 线程结束后合并本线程变量到总变量
                 (subCount) => Interlocked.Add(ref count, subCount));
             Helper.Print(count.ToString());
+            Helper.PrintSplit();
+
+            // Partitioner.Create 避免小数组并行操作因为分区和委托调度而比顺序操作更消耗性能
+            var partitioners = Partitioner.Create(models);
+            Parallel.ForEach(partitioners, (model) =>
+            {
+                Helper.Print(model.Name);
+            });
         }
     }
 }
