@@ -29,15 +29,22 @@ namespace TPLDemo
             {
                 CancellationToken = cancellation.Token,
                 // 最大并行数
-                MaxDegreeOfParallelism = 6,
+                MaxDegreeOfParallelism = Environment.ProcessorCount,
             };
 
             /* 或者手动取消并行操作
              * 注意产生 OperationCanceledException
-            if (!cancellation.IsCancellationRequested)
+            Task.Factory.StartNew(() =>
             {
-                cancellation.Cancel();
-            }
+                Helper.Print("按下 C 键取消并行操作：");
+                if (Console.ReadKey().Key == ConsoleKey.C)
+                {
+                    if (!cancellation.IsCancellationRequested)
+                    {
+                        cancellation.Cancel();
+                    }
+                }
+            });
              */
 
             var result = Parallel.ForEach(models, options, (model, state) =>
