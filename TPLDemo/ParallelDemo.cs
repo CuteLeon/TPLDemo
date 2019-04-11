@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -23,7 +22,7 @@ namespace TPLDemo
                 Helper.Print(model.Name);
             });
             Helper.PrintSplit();
-
+            
             // 延时后自动取消并行操作，注意产生 OperationCanceledException
             CancellationTokenSource cancellation = new CancellationTokenSource(TimeSpan.FromMilliseconds(99999));
             var options = new ParallelOptions()

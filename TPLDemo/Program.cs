@@ -8,7 +8,7 @@ namespace TPLDemo
         {
             Console.WriteLine("Hello World!");
 
-            IRunableDemo<RunModel> runable = new ParallelDemo();
+            IRunableDemo<RunModel> runable = new AtomicDemo();
             runable.Run();
 
             Console.Read();
