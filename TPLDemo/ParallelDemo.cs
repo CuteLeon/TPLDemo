@@ -25,12 +25,6 @@ namespace TPLDemo
 
             // 延时后自动取消并行操作，注意产生 OperationCanceledException
             CancellationTokenSource cancellation = new CancellationTokenSource(TimeSpan.FromMilliseconds(99999));
-            var options = new ParallelOptions()
-            {
-                CancellationToken = cancellation.Token,
-                // 最大并行数
-                MaxDegreeOfParallelism = Environment.ProcessorCount,
-            };
 
             /* 或者手动取消并行操作
              * 注意产生 OperationCanceledException
@@ -46,47 +40,65 @@ namespace TPLDemo
                 }
             });
              */
-
-            var result = Parallel.ForEach(models, options, (model, state) =>
+            try
             {
-                // 是否此次迭代或其他迭代请求退出
-                if (state.ShouldExitCurrentIteration)
-                {
-                    // 如果当前执行的元素标识小于最小请求退出的元素标识，则继续执行此次迭代
-                    if (state.LowestBreakIteration < model.Index)
+                var result = Parallel.ForEach(
+                    models,
+                    new ParallelOptions()
                     {
-                        Helper.Print($"Return at {model.Name}");
-                        return;
-                    }
-                    Helper.Print($"Broken but go on {model.Name}");
-                }
+                        CancellationToken = cancellation.Token,
+                        // 最大并行数
+                        MaxDegreeOfParallelism = Environment.ProcessorCount,
+                    },
+                    (model, state) =>
+                    {
+                        // 是否此次迭代或其他迭代请求退出
+                        if (state.ShouldExitCurrentIteration)
+                        {
+                            // 如果当前执行的元素标识小于最小请求退出的元素标识，则继续执行此次迭代
+                            if (state.LowestBreakIteration < model.Index)
+                            {
+                                Helper.Print($"Return at {model.Name}");
+                                return;
+                            }
+                            Helper.Print($"Broken but go on {model.Name}");
+                        }
 
-                // 是否发生异常或请求停止
-                if (state.IsExceptional || state.IsStopped)
-                {
-                    Helper.Print($"Return at {model.Name}");
-                    return;
-                }
+                        // 是否发生异常或请求停止
+                        if (state.IsExceptional || state.IsStopped)
+                        {
+                            Helper.Print($"Return at {model.Name}");
+                            return;
+                        }
 
-                // 在某次迭代请求Break：请求退出，但仍允许执行某些迭代
-                if (model.Index > 53)
-                {
-                    state.Break();
-                    Helper.Print($"Break at {model.Name}");
-                    return;
-                }
+                        // 在某次迭代请求Break：请求退出，但仍允许执行某些迭代
+                        if (model.Index > 53)
+                        {
+                            state.Break();
+                            Helper.Print($"Break at {model.Name}");
+                            return;
+                        }
 
-                // 在某次迭代请求Stop：请求退出，其他迭代应立即退出
-                if (model.Index > 80)
-                {
-                    Helper.Print($"Stop at {model.Name}");
-                    state.Stop();
-                }
+                        // 在某次迭代请求Stop：请求退出，其他迭代应立即退出
+                        if (model.Index > 80)
+                        {
+                            Helper.Print($"Stop at {model.Name}");
+                            state.Stop();
+                        }
 
-                // 处理迭代
-                Helper.Print($"Process {model.Name}");
-            });
-            Helper.Print($"result.IsCompleted = {result.IsCompleted}");
+                        // 处理迭代
+                        Helper.Print($"Process {model.Name}");
+                    });
+
+                Helper.Print($"result.IsCompleted = {result.IsCompleted}");
+            }
+            catch (OperationCanceledException ex) when (ex != null)
+            {
+            }
+            finally
+            {
+                cancellation.Dispose();
+            }
             Helper.PrintSplit();
 
             // 并行调用 Action
