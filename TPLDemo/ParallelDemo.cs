@@ -32,6 +32,7 @@ namespace TPLDemo
              * 注意产生 OperationCanceledException
             Task.Factory.StartNew(() =>
             {
+                // 手动取消功能将阻塞一条线程
                 Helper.Print("按下 C 键取消并行操作：");
                 if (Console.ReadKey().Key == ConsoleKey.C)
                 {
