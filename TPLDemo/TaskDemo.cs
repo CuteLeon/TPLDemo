@@ -22,6 +22,9 @@ namespace TPLDemo
             {
                 task.Wait();
             }
+            Helper.PrintSplit();
+
+            Task.Factory.StartNew(() => Helper.Print("Greet from Task.Factory."));
         }
     }
 }
