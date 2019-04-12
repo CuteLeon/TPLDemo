@@ -36,6 +36,16 @@ namespace TPLDemo
             Task.WaitAll(tasks);
             // 回到主线程输出 Task State
             Array.ForEach(tasks, (t) => Helper.Print($"Task-{t.Id} Processed {(t.AsyncState as RunModel).Name}"));
+            Helper.PrintSplit();
+
+            /* Task<TResult> 继承自 Task，当以 Task 访问时无法获取 Result
+             * Result 属性会导致线程阻塞以等待异步线程完成
+             */
+            Task<RunModel> funcTask = new Task<RunModel>(() => new RunModel() { Name = "I'm Result-1." });
+            funcTask.Start();
+            Helper.Print($"Task.Result = {funcTask.Result}");
+            funcTask = Task.Factory.StartNew<RunModel>(() => new RunModel() { Name = "I'm Result-2." });
+            Helper.Print($"Task.Result = {funcTask.Result}");
         }
     }
 }
