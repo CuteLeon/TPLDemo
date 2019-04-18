@@ -1,12 +1,10 @@
 ﻿using System.Collections.Generic;
 
-namespace TPLDemo
+namespace TPLDemo.Model
 {
-    public interface IRunableDemo<TModel>
+    public interface IModelable<TModel>
         where TModel : IModel
     {
         IEnumerable<TModel> CreateCollection();
-
-        void Run();
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace TPLDemo
+﻿namespace TPLDemo.Model
 {
     public abstract class ModelBase : IModel
     {

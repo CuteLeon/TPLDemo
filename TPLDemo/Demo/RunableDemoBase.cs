@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using TPLDemo.Model;
 
-namespace TPLDemo
+namespace TPLDemo.Demo
 {
-    public abstract class RunableDemoBase<TModel> : IRunableDemo<TModel>
+    public abstract class RunableDemoBase<TModel> : IRunableDemo, IModelable<TModel>
         where TModel : ModelBase, new()
     {
         public virtual IEnumerable<TModel> CreateCollection()
