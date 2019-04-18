@@ -20,7 +20,16 @@ namespace TPLDemo.Demo
         /// <param name="demoId"></param>
         /// <returns></returns>
         public static IRunableDemo GetRunableDemo(string demoId)
-            => runableDemos[demoId]?.Value;
+        {
+            try
+            {
+                return runableDemos[demoId]?.Value;
+            }
+            catch
+            {
+                throw;
+            }
+        }
 
         /// <summary>
         /// 获取DemoID

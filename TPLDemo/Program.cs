@@ -10,9 +10,9 @@ namespace TPLDemo
             string input;
             while ((input = ReadDemoId()) != "exit")
             {
-                var runable = DemoFactory.GetRunableDemo(input);
                 try
                 {
+                    var runable = DemoFactory.GetRunableDemo(input);
                     runable?.Run();
                 }
                 catch (Exception ex)
