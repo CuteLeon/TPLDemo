@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
-
-namespace TPLDemo.Model
+﻿namespace TPLDemo.Model
 {
     public interface IModelable<TModel>
         where TModel : IModel
     {
-        IEnumerable<TModel> CreateCollection();
+        TModel[] CreateCollection();
     }
 }

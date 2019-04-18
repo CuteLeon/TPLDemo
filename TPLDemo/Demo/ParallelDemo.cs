@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,7 +14,7 @@ namespace TPLDemo.Demo
     {
         public override void Run()
         {
-            var models = this.CreateCollection() as List<RunModel>;
+            var models = this.CreateCollection();
 
             Parallel.For(10, 30, (index) =>
             {

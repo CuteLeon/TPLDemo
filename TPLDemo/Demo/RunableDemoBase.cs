@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using TPLDemo.Model;
 
 namespace TPLDemo.Demo
@@ -7,8 +6,8 @@ namespace TPLDemo.Demo
     public abstract class RunableDemoBase<TModel> : IRunableDemo, IModelable<TModel>
         where TModel : ModelBase, new()
     {
-        public virtual IEnumerable<TModel> CreateCollection()
-            => Enumerable.Range(1, 100).Select(index => this.CreateModel(index)).ToList();
+        public virtual TModel[] CreateCollection()
+            => Enumerable.Range(1, 100).Select(index => this.CreateModel(index)).ToArray();
 
         public abstract void Run();
 
