@@ -12,6 +12,7 @@ namespace TPLDemo.Demo
             { "atomic", new Lazy<IRunableDemo>(() =>  new AtomicDemo()) },
             { "task", new Lazy<IRunableDemo>(() =>  new TaskDemo()) },
             { "continu", new Lazy<IRunableDemo>(() =>  new TaskContinuationDemo()) },
+            { "child", new Lazy<IRunableDemo>(() =>  new ChildTaskDemo()) },
         };
 
         /// <summary>
