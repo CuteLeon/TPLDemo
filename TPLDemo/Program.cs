@@ -12,7 +12,10 @@ namespace TPLDemo
             {
                 try
                 {
-                    var runable = DemoFactory.GetRunableDemo(input);
+                    var runable = string.IsNullOrEmpty(input) ?
+                        DemoFactory.GetLastRunableDemo() :
+                        DemoFactory.GetRunableDemo(input);
+
                     runable?.Run();
                 }
                 catch (Exception ex)

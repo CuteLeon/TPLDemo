@@ -13,6 +13,7 @@ namespace TPLDemo.Demo
             { "task", new Lazy<IRunableDemo>(() =>  new TaskDemo()) },
             { "continu", new Lazy<IRunableDemo>(() =>  new TaskContinuationDemo()) },
             { "child", new Lazy<IRunableDemo>(() =>  new ChildTaskDemo()) },
+            { "wait", new Lazy<IRunableDemo>(() =>  new WaitTaskDemo()) },
         };
 
         /// <summary>
@@ -31,6 +32,13 @@ namespace TPLDemo.Demo
                 throw;
             }
         }
+
+        /// <summary>
+        /// 获取最后一个演示
+        /// </summary>
+        /// <returns></returns>
+        public static IRunableDemo GetLastRunableDemo()
+            => runableDemos.Values.LastOrDefault()?.Value;
 
         /// <summary>
         /// 获取DemoID
