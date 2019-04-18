@@ -11,10 +11,11 @@ namespace TPLDemo.Demo
     /// </summary>
     public class WaitTaskDemo : RunableDemoBase<TaskModel>
     {
-        byte skiped = 0;
+        protected byte skiped = 0;
 
         public override void Run()
         {
+            // Wait*() 后的代码继续在主线程执行
             var tasks = this.CreateCollection().Select(model => model.Task).ToArray();
             Array.ForEach(tasks, task => task.Start());
 

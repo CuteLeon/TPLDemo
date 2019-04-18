@@ -14,6 +14,7 @@ namespace TPLDemo.Demo
             { "continu", new Lazy<IRunableDemo>(() =>  new TaskContinuationDemo()) },
             { "child", new Lazy<IRunableDemo>(() =>  new ChildTaskDemo()) },
             { "wait", new Lazy<IRunableDemo>(() =>  new WaitTaskDemo()) },
+            { "compose", new Lazy<IRunableDemo>(() =>  new ComposeTaskDemo()) },
         };
 
         /// <summary>
