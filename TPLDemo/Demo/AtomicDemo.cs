@@ -4,6 +4,9 @@ using TPLDemo.Model;
 
 namespace TPLDemo.Demo
 {
+    /// <summary>
+    /// 原子操作演示
+    /// </summary>
     public class AtomicDemo : RunableDemoBase<RunModel>
     {
         public static long Count = 0;

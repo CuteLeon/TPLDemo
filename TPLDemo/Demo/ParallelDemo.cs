@@ -8,6 +8,9 @@ using TPLDemo.Model;
 
 namespace TPLDemo.Demo
 {
+    /// <summary>
+    /// 并行演示
+    /// </summary>
     public class ParallelDemo : RunableDemoBase<RunModel>
     {
         public override void Run()

@@ -8,9 +8,10 @@ namespace TPLDemo.Demo
     {
         private static readonly Dictionary<string, Lazy<IRunableDemo>> runableDemos = new Dictionary<string, Lazy<IRunableDemo>>()
         {
-            { "parallel", new Lazy<IRunableDemo>(() =>  new ParallelDemo())},
-            { "atomic", new Lazy<IRunableDemo>(() =>  new AtomicDemo())},
-            { "task", new Lazy<IRunableDemo>(() =>  new TaskDemo())},
+            { "parallel", new Lazy<IRunableDemo>(() =>  new ParallelDemo()) },
+            { "atomic", new Lazy<IRunableDemo>(() =>  new AtomicDemo()) },
+            { "task", new Lazy<IRunableDemo>(() =>  new TaskDemo()) },
+            { "continu", new Lazy<IRunableDemo>(() =>  new TaskContinuationDemo()) },
         };
 
         /// <summary>
