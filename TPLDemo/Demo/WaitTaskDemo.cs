@@ -15,7 +15,7 @@ namespace TPLDemo.Demo
 
         public override void Run()
         {
-            // Wait*() 后的代码继续在主线程执行
+            // Wait*() 方法会阻塞调用线程，且之后的后的代码继续在主线程执行
             var tasks = this.CreateCollection().Select(model => model.Task).ToArray();
             Array.ForEach(tasks, task => task.Start());
 

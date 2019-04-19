@@ -25,6 +25,17 @@ namespace TPLDemo.Demo
             {
                 Helper.PrintLine($"遇到 {ex.InnerExceptions.Count} 个异常：\n\t{string.Join("\n\t", ex.InnerExceptions.Select(e => e.Message))}");
             }
+
+            var task = Task.Factory.StartNew(() => { throw new Exception("exception in task."); });
+            var continuation = task.ContinueWith((pre) => { throw new Exception("exception in continuation."); }, TaskContinuationOptions.OnlyOnFaulted);
+            try
+            {
+                continuation.Wait();
+            }
+            catch (AggregateException ex)
+            {
+                Helper.PrintLine($"遇到 {ex.InnerExceptions.Count} 个异常：\n\t{string.Join("\n\t", ex.InnerExceptions.Select(e => e.Message))}");
+            }
         }
     }
 }

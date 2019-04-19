@@ -12,7 +12,7 @@ namespace TPLDemo.Demo
     {
         public override void Run()
         {
-            // When*() 方法后的代码在新的线程执行
+            // When*() 方法不会阻塞调用线程，且之后的代码在新的线程执行
             var tasks = this.CreateCollection().Select(model => model.Task).ToArray();
             Array.ForEach(tasks, task => task.Start());
 

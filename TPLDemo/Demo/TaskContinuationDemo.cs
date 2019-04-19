@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using TPLDemo.Model;
 
@@ -10,6 +11,8 @@ namespace TPLDemo.Demo
     /// </summary>
     public class TaskContinuationDemo : RunableDemoBase<RunModel>
     {
+        protected byte skiped = 0;
+
         public override void Run()
         {
             /* ContinuWith：
@@ -32,7 +35,8 @@ namespace TPLDemo.Demo
                 Array.ForEach(models, model => model.Name += " [Processed]");
                 Helper.PrintLine("处理完成。");
                 return models;
-            });
+            },
+            TaskContinuationOptions.OnlyOnRanToCompletion);
 
             // 输出数据的任务 （延续在 处理数据的任务 后面）
             var printTask = processTask.ContinueWith(preTask =>
@@ -40,7 +44,8 @@ namespace TPLDemo.Demo
                 Helper.PrintLine("printTask...");
                 var models = preTask.Result;
                 Helper.PrintLine($"输出结果：\n\t{string.Join("\n\t", models.Select(model => model.Name))}");
-            });
+            },
+            TaskContinuationOptions.OnlyOnRanToCompletion);
 
             // 空闲
             var idleTask = printTask.ContinueWith(preTask =>
@@ -62,6 +67,58 @@ namespace TPLDemo.Demo
             lastTask.Wait();
 
             Helper.PrintLine($"返回的最后一个任务：{lastTask.Id}");
+            Helper.PrintSplit();
+
+            // 或者等待全部of多个任务
+            Task.Factory.ContinueWhenAll(
+                Enumerable.Range(1, 10).Select(index => Task.Factory.StartNew<int>(() => { Task.Delay(10 * index).Wait(); Helper.PrintLine($"task {index}"); return index; })).ToArray(),
+                (tasks) =>
+                {
+                    // 所有任务完成后，计算结果总和
+                    int sum = tasks.Sum(t => t.Result);
+                    Helper.PrintLine($"结算结果总和 = {sum}");
+                }).Wait();
+            Helper.PrintSplit();
+
+            // 或者等待任一of多个任务
+            Task.Factory.ContinueWhenAny(
+                Enumerable.Range(1, 10).Select(index => Task.Factory.StartNew<int>(() =>
+                {
+                    if (Thread.VolatileRead(ref this.skiped) == 1)
+                    {
+                        return int.MinValue;
+                    }
+                    Task.Delay(10 * index).Wait();
+                    Helper.PrintLine($"task {index}");
+                    return index;
+                })).ToArray(),
+                (task) =>
+                {
+                    // 任一任务完成后，返回结果，此时其他任务仍在执行
+                    Thread.VolatileWrite(ref this.skiped, 1);
+                    Helper.PrintLine($"最先完成的任务 = {task.Result}");
+                }).Wait();
+            Helper.PrintSplit();
+
+            // 或者在某些特定条件下才执行延续任务
+            /* 如果条件在前面的任务准备调用延续时未得到满足，则延续将直接转换为 TaskStatus.Canceled 状态，之后将无法启动。
+             * 在任务完成之前，将阻止 Task.Result 属性。 但是，如果任务已取消或出错，则尝试访问 Result 属性将引发 AggregateException 异常。 可通过使用 OnlyOnRanToCompletion 选项避免此问题。
+             */
+            var scanTask = Task.Factory.StartNew(() => { Helper.PrintLine("扫描数据..."); });
+            // 仅在前驱任务被取消时运行
+            var cancelScanTask = scanTask.ContinueWith((pre) => { Helper.PrintLine("取消扫描数据..."); }, TaskContinuationOptions.OnlyOnCanceled);
+            // 仅在前驱任务正常完成时运行
+            var saveTask = scanTask.ContinueWith((pre) => { Helper.PrintLine("保存数据..."); throw new Exception("保存失败咯，略略略"); }, TaskContinuationOptions.OnlyOnRanToCompletion);
+            // 仅在前驱任务失败时运行
+            var faultedSaveTask = saveTask.ContinueWith((pre) => { Helper.PrintLine($"保存数据出错：{string.Join("", pre.Exception.InnerExceptions.Select(e => e.Message))}"); }, TaskContinuationOptions.OnlyOnFaulted);
+            faultedSaveTask.Wait();
+            Helper.PrintSplit();
+
+            // 取消延续任务：延续任务使用 TaskContinuationOptions.NotOnCanceled 或 前后两个任务使用同一个 CancellationToken。
+            var cancellation = new CancellationTokenSource();
+            var task_1 = Task.Factory.StartNew(() => { Helper.PrintLine("task_1"); cancellation.Cancel(); }, cancellation.Token);
+            var task_2 = task_1.ContinueWith((pre) => { Helper.PrintLine("task_2"); }, cancellation.Token, TaskContinuationOptions.NotOnCanceled, TaskScheduler.Current);
+            task_1.Wait();
         }
     }
 }
