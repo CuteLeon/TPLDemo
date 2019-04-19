@@ -16,7 +16,14 @@ namespace TPLDemo
                         DemoFactory.GetLastRunableDemo() :
                         DemoFactory.GetRunableDemo(input);
 
-                    runable?.Run();
+                    if (runable == null)
+                    {
+                        Helper.PrintLine($"id= {input} 返回的 Demo 为空。");
+                    }
+                    else
+                    {
+                        runable.Run();
+                    }
                 }
                 catch (Exception ex)
                 {
