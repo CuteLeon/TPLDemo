@@ -113,12 +113,6 @@ namespace TPLDemo.Demo
             var faultedSaveTask = saveTask.ContinueWith((pre) => { Helper.PrintLine($"保存数据出错：{string.Join("", pre.Exception.InnerExceptions.Select(e => e.Message))}"); }, TaskContinuationOptions.OnlyOnFaulted);
             faultedSaveTask.Wait();
             Helper.PrintSplit();
-
-            // 取消延续任务：延续任务使用 TaskContinuationOptions.NotOnCanceled 或 前后两个任务使用同一个 CancellationToken。
-            var cancellation = new CancellationTokenSource();
-            var task_1 = Task.Factory.StartNew(() => { Helper.PrintLine("task_1"); cancellation.Cancel(); }, cancellation.Token);
-            var task_2 = task_1.ContinueWith((pre) => { Helper.PrintLine("task_2"); }, cancellation.Token, TaskContinuationOptions.NotOnCanceled, TaskScheduler.Current);
-            task_1.Wait();
         }
     }
 }

@@ -56,8 +56,57 @@ namespace TPLDemo.Demo
             }
             finally
             {
+                source.Dispose();
                 Helper.PrintLine($"任务已经取消");
             }
+            Helper.PrintSplit();
+
+            // 取消延续任务：延续任务使用 TaskContinuationOptions.NotOnCanceled 或 前后两个任务使用同一个 CancellationToken。
+            var cancellation = new CancellationTokenSource();
+            var task_1 = Task.Factory.StartNew(() => { Helper.PrintLine("task_1"); cancellation.Cancel(); }, cancellation.Token);
+            var task_2 = task_1.ContinueWith((pre) => { Helper.PrintLine("task_2"); }, cancellation.Token, TaskContinuationOptions.NotOnCanceled, TaskScheduler.Current);
+            task_1.Wait();
+            Helper.PrintSplit();
+
+            cancellation = new CancellationTokenSource();
+            cancellation.CancelAfter(150);
+            // 取消子任务：父子任务使用同一个 CancellationToken
+            task_1 = Task.Factory.StartNew(
+                () =>
+                {
+                    Helper.PrintLine("父任务启动");
+                    Thread.Sleep(100);
+                    Helper.PrintLine("准备启动子任务...");
+
+                    task_2 = Task.Factory.StartNew(
+                        () =>
+                        {
+                            Helper.PrintLine("子任务启动");
+                            Thread.Sleep(100);
+
+                            if (cancellation.Token.IsCancellationRequested)
+                            {
+                                Helper.PrintLine("取消子任务");
+                                return;
+                            }
+                            Helper.PrintLine("子任务完成");
+                        },
+                        cancellation.Token,
+                        TaskCreationOptions.AttachedToParent,
+                        TaskScheduler.Default);
+
+                    task_2.Wait();
+                    if (cancellation.Token.IsCancellationRequested)
+                    {
+                        Helper.PrintLine("取消父任务");
+                        return;
+                    }
+                    Helper.PrintLine("父任务完成");
+                },
+                cancellation.Token);
+
+            task_1.Wait();
+            cancellation.Dispose();
         }
     }
 }
