@@ -48,6 +48,16 @@ namespace TPLDemo.Demo
             // 这里只需要手动等待父任务结束，而不用手动等待子任务结束，因为父任务会隐式等待子任务
             parentTask_2.Wait();
             Helper.PrintLine("父任务-2完成...");
+            Helper.PrintSplit();
+
+            Task.FromResult(
+                Task.Factory.StartNew(() =>
+                {
+                    Helper.PrintLine("任务开始");
+                    Helper.PrintLine("任务完成");
+                }))
+                .Unwrap() // 拆开重复包装的 Task
+                .Wait();
         }
     }
 }
