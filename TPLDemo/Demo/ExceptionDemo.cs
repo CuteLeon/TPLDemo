@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using TPLDemo.Model;
 
@@ -25,6 +26,7 @@ namespace TPLDemo.Demo
             {
                 Helper.PrintLine($"遇到 {ex.InnerExceptions.Count} 个异常：\n\t{string.Join("\n\t", ex.InnerExceptions.Select(e => e.Message))}");
             }
+            Helper.PrintSplit();
 
             var task = Task.Factory.StartNew(() => { throw new Exception("exception in task."); });
             var continuation = task.ContinueWith((pre) => { Helper.PrintLine($"异步处理任务的异常：{pre.Exception.Message}"); }, TaskContinuationOptions.OnlyOnFaulted);
@@ -36,6 +38,7 @@ namespace TPLDemo.Demo
             {
                 Helper.PrintLine($"try 捕捉到 {ex.InnerExceptions.Count} 个异常：\n\t{string.Join("\n\t", ex.InnerExceptions.Select(e => e.Message))}");
             }
+            Helper.PrintSplit();
 
             // 附加子任务的异常将在 AggregateException 内层层嵌套，可使用 Flatten() 方法平展
             task = Task.Factory.StartNew(() =>
@@ -52,7 +55,8 @@ namespace TPLDemo.Demo
 
                         throw new Exception("子任务发生异常");
                     },
-                    TaskCreationOptions.AttachedToParent);
+                    TaskCreationOptions.AttachedToParent)
+                    .Wait();
             });
 
             try
@@ -67,7 +71,48 @@ namespace TPLDemo.Demo
                 Helper.PrintLine($"try 捕捉到 {fex.InnerExceptions.Count} 个异常：\n\t{string.Join("\n\t", fex.InnerExceptions.Select(e => e.Message))}");
 
                 // 抛出平展后的异常
-                throw fex;
+                // throw fex;
+            }
+            Helper.PrintSplit();
+
+            task = Task.Factory.StartNew(() =>
+            {
+                try
+                {
+                    Task.WaitAll(new[]
+                        {
+                            Task.Factory.StartNew(() => throw new Exception()),
+                            Task.Factory.StartNew(() => throw new ArgumentNullException()),
+                            Task.Factory.StartNew(() => throw new InvalidOperationException()),
+                            Task.Factory.StartNew(() => throw new NotImplementedException()),
+                        });
+                }
+                catch (AggregateException ex)
+                {
+                    // 使用 Handle 方法忽略 Exception 类型的异常
+                    ex.Handle((e) =>
+                    {
+                        if (e.GetType() == typeof(Exception))
+                        {
+                            Helper.PrintLine($"忽略一个异常：{e.GetType().Name}");
+                            return false;
+                        }
+                        else
+                        {
+                            Helper.PrintLine($"抛出一个异常：{e.GetType().Name}");
+                            return true;
+                        }
+                    });
+                }
+            });
+
+            try
+            {
+                task.Wait();
+            }
+            catch (AggregateException ex)
+            {
+                Helper.PrintLine($"try 捕捉到 {ex.InnerExceptions.Count} 个异常：\n\t{string.Join("\n\t", ex.InnerExceptions.Select(e => e.Message))}");
             }
         }
     }
