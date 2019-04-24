@@ -15,9 +15,9 @@ namespace TPLDemo.Demo
             { "child", new Lazy<IRunableDemo>(() =>  new ChildTaskDemo()) },
             { "wait", new Lazy<IRunableDemo>(() =>  new WaitTaskDemo()) },
             { "compose", new Lazy<IRunableDemo>(() =>  new ComposeTaskDemo()) },
-            { "exception", new Lazy<IRunableDemo>(() =>  new ExceptionDemo()) },
             { "factory", new Lazy<IRunableDemo>(() =>  new TaskFactoryDemo()) },
             { "cancel", new Lazy<IRunableDemo>(() =>  new CancelTaskDemo()) },
+            { "exception", new Lazy<IRunableDemo>(() =>  new ExceptionDemo()) },
         };
 
         /// <summary>

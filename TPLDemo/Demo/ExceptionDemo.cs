@@ -27,14 +27,47 @@ namespace TPLDemo.Demo
             }
 
             var task = Task.Factory.StartNew(() => { throw new Exception("exception in task."); });
-            var continuation = task.ContinueWith((pre) => { throw new Exception("exception in continuation."); }, TaskContinuationOptions.OnlyOnFaulted);
+            var continuation = task.ContinueWith((pre) => { Helper.PrintLine($"异步处理任务的异常：{pre.Exception.Message}"); }, TaskContinuationOptions.OnlyOnFaulted);
             try
             {
-                continuation.Wait();
+                task.Wait();
             }
             catch (AggregateException ex)
             {
-                Helper.PrintLine($"遇到 {ex.InnerExceptions.Count} 个异常：\n\t{string.Join("\n\t", ex.InnerExceptions.Select(e => e.Message))}");
+                Helper.PrintLine($"try 捕捉到 {ex.InnerExceptions.Count} 个异常：\n\t{string.Join("\n\t", ex.InnerExceptions.Select(e => e.Message))}");
+            }
+
+            // 附加子任务的异常将在 AggregateException 内层层嵌套，可使用 Flatten() 方法平展
+            task = Task.Factory.StartNew(() =>
+            {
+                Task.Factory.StartNew(
+                    () =>
+                    {
+                        Task.Factory.StartNew(
+                            () =>
+                            {
+                                throw new Exception("孙任务发生异常");
+                            },
+                            TaskCreationOptions.AttachedToParent);
+
+                        throw new Exception("子任务发生异常");
+                    },
+                    TaskCreationOptions.AttachedToParent);
+            });
+
+            try
+            {
+                task.Wait();
+            }
+            catch (AggregateException ex)
+            {
+                // 使用 Flatten() 方法转换 InnerExceptions 树状结构为一维列表
+                Helper.PrintLine($"try 捕捉到 {ex.InnerExceptions.Count} 个异常：\n\t{string.Join("\n\t", ex.InnerExceptions.Select(e => e.Message))}");
+                var fex = ex.Flatten();
+                Helper.PrintLine($"try 捕捉到 {fex.InnerExceptions.Count} 个异常：\n\t{string.Join("\n\t", fex.InnerExceptions.Select(e => e.Message))}");
+
+                // 抛出平展后的异常
+                throw fex;
             }
         }
     }
