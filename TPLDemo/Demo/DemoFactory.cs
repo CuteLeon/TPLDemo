@@ -18,6 +18,7 @@ namespace TPLDemo.Demo
             { "factory", new Lazy<IRunableDemo>(() =>  new TaskFactoryDemo()) },
             { "exception", new Lazy<IRunableDemo>(() =>  new ExceptionDemo()) },
             { "cancel", new Lazy<IRunableDemo>(() =>  new CancelTaskDemo()) },
+            { "buffer", new Lazy<IRunableDemo>(() =>  new BufferBlockDemo()) },
         };
 
         /// <summary>
