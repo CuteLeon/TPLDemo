@@ -31,6 +31,7 @@ namespace TPLDemo.Demo
             { "transform", new Lazy<IRunableDemo>(()=> new TransformBlockDemo()) },
             { "transformmany", new Lazy<IRunableDemo>(()=> new TransformManyBlockDemo()) },
             { "batch", new Lazy<IRunableDemo>(()=> new BatchBlockDemo()) },
+            { "join", new Lazy<IRunableDemo>(()=> new JoinBlockDemo()) },
         };
 
         /// <summary>
