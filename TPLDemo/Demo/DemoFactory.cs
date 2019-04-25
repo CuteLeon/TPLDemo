@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using TPLDemo.Demo.BufferingBlockDemos;
+using TPLDemo.Demo.ExecutionDemos;
 using TPLDemo.Demo.ParallelDemos;
 using TPLDemo.Demo.TaskDemos;
 using TPLDemo.Demo.ThreadDemos;
@@ -25,6 +26,7 @@ namespace TPLDemo.Demo
             { "buffer", new Lazy<IRunableDemo>(() =>  new BufferBlockDemo()) },
             { "broadcast", new Lazy<IRunableDemo>(() =>  new BroadcastBlockDemo()) },
             { "writeonce", new Lazy<IRunableDemo>(() =>  new WriteOnceBlockDemo()) },
+            { "action", new Lazy<IRunableDemo>(()=> new ActionBlockDemo()) },
         };
 
         /// <summary>

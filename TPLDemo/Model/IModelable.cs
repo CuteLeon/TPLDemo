@@ -3,6 +3,6 @@
     public interface IModelable<TModel>
         where TModel : IModel
     {
-        TModel[] CreateCollection();
+        TModel[] CreateCollection(int count);
     }
 }

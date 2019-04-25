@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 using TPLDemo.Model;
 
@@ -14,7 +13,7 @@ namespace TPLDemo.Demo.BufferingBlockDemos
         {
             WriteOnceBlock<RunModel> writeOnceBlock = new WriteOnceBlock<RunModel>((model) => model);
 
-            var models = this.CreateCollection().Take(10).ToArray();
+            var models = this.CreateCollection();
 
             Parallel.ForEach(models, model => writeOnceBlock.Post(model));
 

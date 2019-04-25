@@ -15,7 +15,7 @@ namespace TPLDemo.Demo.BufferingBlockDemos
         {
             BufferBlock<RunModel> bufferBlock = new BufferBlock<RunModel>();
 
-            var models = this.CreateCollection().Take(20).ToArray();
+            var models = this.CreateCollection();
 
             // BufferBlock 为先进先出队列，每个数据块读取一次后自动销毁
             Helper.PrintLine("BufferBlock<> 支持并发操作");
