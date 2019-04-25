@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using TPLDemo.Demo.BufferingBlockDemos;
+using TPLDemo.Demo.ParallelDemos;
+using TPLDemo.Demo.TaskDemos;
+using TPLDemo.Demo.ThreadDemos;
 
 namespace TPLDemo.Demo
 {

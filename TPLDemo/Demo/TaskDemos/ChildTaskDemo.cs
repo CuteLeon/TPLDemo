@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using TPLDemo.Model;
 
-namespace TPLDemo.Demo
+namespace TPLDemo.Demo.TaskDemos
 {
     /// <summary>
     /// 子任务演示

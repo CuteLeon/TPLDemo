@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace TPLDemo.Demo
+namespace TPLDemo.Demo.TaskDemos
 {
     /// <summary>
     /// 组合任务演示

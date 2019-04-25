@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TPLDemo.Model;
 
-namespace TPLDemo.Demo
+namespace TPLDemo.Demo.TaskDemos
 {
     /// <summary>
     /// 任务演示

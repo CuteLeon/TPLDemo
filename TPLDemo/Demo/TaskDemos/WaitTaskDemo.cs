@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using TPLDemo.Model;
 
-namespace TPLDemo.Demo
+namespace TPLDemo.Demo.TaskDemos
 {
     /// <summary>
     /// 等待任务演示

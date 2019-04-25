@@ -2,7 +2,7 @@
 using System.Threading;
 using TPLDemo.Model;
 
-namespace TPLDemo.Demo
+namespace TPLDemo.Demo.ThreadDemos
 {
     /// <summary>
     /// 原子操作演示

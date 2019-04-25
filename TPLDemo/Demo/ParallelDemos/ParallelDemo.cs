@@ -5,7 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using TPLDemo.Model;
 
-namespace TPLDemo.Demo
+namespace TPLDemo.Demo.ParallelDemos
 {
     /// <summary>
     /// 并行演示
