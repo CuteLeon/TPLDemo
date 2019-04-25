@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks.Dataflow;
+﻿using System.Threading.Tasks.Dataflow;
 using TPLDemo.Model;
 
 namespace TPLDemo.Demo.BlockDemos.GroupingBlockDemos
@@ -17,6 +14,7 @@ namespace TPLDemo.Demo.BlockDemos.GroupingBlockDemos
             JoinBlock<RunModel, string, RunModel> joinBlock = new JoinBlock<RunModel, string, RunModel>();
             var models = this.CreateCollection(2);
 
+            // 注意：并发操作下，必须 lock，否则组内的数据可能因为顺序而匹配为错误的组
             joinBlock.Target1.Post(models[0]);
             joinBlock.Target2.Post("next is");
             joinBlock.Target3.Post(models[1]);
