@@ -27,6 +27,7 @@ namespace TPLDemo.Demo
             { "broadcast", new Lazy<IRunableDemo>(() =>  new BroadcastBlockDemo()) },
             { "writeonce", new Lazy<IRunableDemo>(() =>  new WriteOnceBlockDemo()) },
             { "action", new Lazy<IRunableDemo>(()=> new ActionBlockDemo()) },
+            { "transform", new Lazy<IRunableDemo>(()=> new TransformBlockDemo()) },
         };
 
         /// <summary>
