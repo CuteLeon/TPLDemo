@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using TPLDemo.Demo.BufferingBlockDemos;
-using TPLDemo.Demo.ExecutionDemos;
+using TPLDemo.Demo.BlockDemos.BufferingBlockDemos;
+using TPLDemo.Demo.BlockDemos.ExecutionBlockDemos;
 using TPLDemo.Demo.ParallelDemos;
 using TPLDemo.Demo.TaskDemos;
 using TPLDemo.Demo.ThreadDemos;

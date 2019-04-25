@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 using TPLDemo.Model;
 
-namespace TPLDemo.Demo.BufferingBlockDemos
+namespace TPLDemo.Demo.BlockDemos.BufferingBlockDemos
 {
     /// <summary>
     /// 缓冲块演示

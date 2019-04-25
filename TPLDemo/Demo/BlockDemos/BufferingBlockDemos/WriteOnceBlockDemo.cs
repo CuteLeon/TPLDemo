@@ -2,7 +2,7 @@
 using System.Threading.Tasks.Dataflow;
 using TPLDemo.Model;
 
-namespace TPLDemo.Demo.BufferingBlockDemos
+namespace TPLDemo.Demo.BlockDemos.BufferingBlockDemos
 {
     /// <summary>
     /// 一次性写入块演示
