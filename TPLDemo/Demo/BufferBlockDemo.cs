@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 using TPLDemo.Model;
@@ -19,6 +17,7 @@ namespace TPLDemo.Demo
 
             var models = this.CreateCollection().Take(20).ToArray();
 
+            // BufferBlock 为先进先出队列，每个数据块读取一次后自动销毁
             Helper.PrintLine("BufferBlock<> 支持并发操作");
             Parallel.ForEach(models, model => bufferBlock.Post(model));
 

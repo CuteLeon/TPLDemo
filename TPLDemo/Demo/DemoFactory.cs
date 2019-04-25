@@ -19,6 +19,7 @@ namespace TPLDemo.Demo
             { "exception", new Lazy<IRunableDemo>(() =>  new ExceptionDemo()) },
             { "cancel", new Lazy<IRunableDemo>(() =>  new CancelTaskDemo()) },
             { "buffer", new Lazy<IRunableDemo>(() =>  new BufferBlockDemo()) },
+            { "broadcast", new Lazy<IRunableDemo>(() =>  new BroadcastBlockDemo()) },
         };
 
         /// <summary>
