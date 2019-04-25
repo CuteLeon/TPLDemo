@@ -28,6 +28,7 @@ namespace TPLDemo.Demo
             { "writeonce", new Lazy<IRunableDemo>(() =>  new WriteOnceBlockDemo()) },
             { "action", new Lazy<IRunableDemo>(()=> new ActionBlockDemo()) },
             { "transform", new Lazy<IRunableDemo>(()=> new TransformBlockDemo()) },
+            { "transformmany", new Lazy<IRunableDemo>(()=> new TransformManyBlockDemo()) },
         };
 
         /// <summary>
