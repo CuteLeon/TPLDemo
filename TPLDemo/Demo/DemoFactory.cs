@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TPLDemo.Demo.BlockDemos.BufferingBlockDemos;
 using TPLDemo.Demo.BlockDemos.ExecutionBlockDemos;
+using TPLDemo.Demo.BlockDemos.GroupingBlockDemos;
 using TPLDemo.Demo.ParallelDemos;
 using TPLDemo.Demo.TaskDemos;
 using TPLDemo.Demo.ThreadDemos;
@@ -29,6 +30,7 @@ namespace TPLDemo.Demo
             { "action", new Lazy<IRunableDemo>(()=> new ActionBlockDemo()) },
             { "transform", new Lazy<IRunableDemo>(()=> new TransformBlockDemo()) },
             { "transformmany", new Lazy<IRunableDemo>(()=> new TransformManyBlockDemo()) },
+            { "batch", new Lazy<IRunableDemo>(()=> new BatchBlockDemo()) },
         };
 
         /// <summary>
