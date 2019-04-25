@@ -8,7 +8,9 @@ namespace TPLDemo.Demo.BlockDemos.ExecutionBlockDemos
         public override void Run()
         {
             // TransformManyBlock 可以为每次请求返回多个结果
-            TransformManyBlock<RunModel, char> transformManyBlock = new TransformManyBlock<RunModel, char>((model) => $"I'm {model.Name}".ToCharArray());
+            TransformManyBlock<RunModel, char> transformManyBlock = new TransformManyBlock<RunModel, char>(
+                (model) => $"I'm {model.Name}".ToCharArray(),
+                new ExecutionDataflowBlockOptions() { MaxDegreeOfParallelism = 4 });
 
             var model = this.CreateCollection(1)[0];
 

@@ -11,7 +11,10 @@ namespace TPLDemo.Demo.BlockDemos.ExecutionBlockDemos
     {
         public override void Run()
         {
-            TransformBlock<RunModel, string> transformBlock = new TransformBlock<RunModel, string>((model) => $"I'm {model.Name}");
+            // 指定块最大并行数量为 4
+            TransformBlock<RunModel, string> transformBlock = new TransformBlock<RunModel, string>(
+                (model) => $"I'm {model.Name}",
+                new ExecutionDataflowBlockOptions() { MaxDegreeOfParallelism = 4 });
 
             var models = this.CreateCollection();
 

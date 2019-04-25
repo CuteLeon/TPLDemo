@@ -11,7 +11,10 @@ namespace TPLDemo.Demo.BlockDemos.ExecutionBlockDemos
     {
         public override void Run()
         {
-            ActionBlock<RunModel> actionBlock = new ActionBlock<RunModel>((model) => Helper.PrintLine($"ActionBlock: {model.Name}"));
+            // 指定块最大并行数量为 4
+            ActionBlock<RunModel> actionBlock = new ActionBlock<RunModel>(
+                (model) => Helper.PrintLine($"ActionBlock: {model.Name}"),
+                new ExecutionDataflowBlockOptions() { MaxDegreeOfParallelism = 4 });
             var models = this.CreateCollection();
 
             Parallel.ForEach(models, model => actionBlock.Post(model));
