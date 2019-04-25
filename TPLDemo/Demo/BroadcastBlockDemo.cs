@@ -16,7 +16,7 @@ namespace TPLDemo.Demo
             BroadcastBlock<RunModel> broadcastBlock = new BroadcastBlock<RunModel>((model) => model);
 
             var models = this.CreateCollection().Take(10).ToArray();
-            Array.ForEach(models, model => broadcastBlock.Post(model));
+            Parallel.ForEach(models, model => broadcastBlock.Post(model));
 
             // BroadcastBlock 只会保留最后一个结果，且不限读取次数
             Parallel.For(0, 10, (index) =>

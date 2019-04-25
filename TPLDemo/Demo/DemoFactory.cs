@@ -20,6 +20,7 @@ namespace TPLDemo.Demo
             { "cancel", new Lazy<IRunableDemo>(() =>  new CancelTaskDemo()) },
             { "buffer", new Lazy<IRunableDemo>(() =>  new BufferBlockDemo()) },
             { "broadcast", new Lazy<IRunableDemo>(() =>  new BroadcastBlockDemo()) },
+            { "writeonce", new Lazy<IRunableDemo>(() =>  new WriteOnceBlockDemo()) },
         };
 
         /// <summary>
