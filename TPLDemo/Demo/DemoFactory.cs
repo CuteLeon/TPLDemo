@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using TPLDemo.Demo.BlockDemos.BlockMQDemos;
 using TPLDemo.Demo.BlockDemos.BufferingBlockDemos;
 using TPLDemo.Demo.BlockDemos.ExecutionBlockDemos;
 using TPLDemo.Demo.BlockDemos.GroupingBlockDemos;
@@ -33,6 +34,7 @@ namespace TPLDemo.Demo
             { "batchedjoin", new Lazy<IRunableDemo>(()=> new BatchedJoinBlockDemo()) },
             { "broadcast", new Lazy<IRunableDemo>(() =>  new BroadcastBlockDemo()) },
             { "buffer", new Lazy<IRunableDemo>(() =>  new BufferBlockDemo()) },
+            { "pubsub", new Lazy<IRunableDemo>(() =>  new PubSubDemo()) },
         };
 
         /// <summary>
