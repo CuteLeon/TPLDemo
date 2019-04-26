@@ -27,7 +27,7 @@ namespace TPLDemo.Demo.BlockDemos.BufferingBlockDemos
                     // ReceiveAsync 可以异步接收，并在 ContinueWith 里处理
                     var model = pre.Result;
                     Helper.PrintLine($"异步接收 No.{index} {model.Name}");
-                });
+                }).Wait();
             }
             Helper.PrintSplit();
 
@@ -38,6 +38,15 @@ namespace TPLDemo.Demo.BlockDemos.BufferingBlockDemos
                 // Receive() 会导致线程阻塞，直到下次 Post
                 var model = bufferBlock.Receive();
                 Helper.PrintLine($"同步接收 No.{index} {model.Name}");
+            }
+            Helper.PrintSplit();
+
+            Helper.PrintLine("BufferBlock<> 异步发送");
+            Array.ForEach(models, model => bufferBlock.SendAsync(model));
+            for (int index = 0; index < models.Length; index++)
+            {
+                var model = bufferBlock.ReceiveAsync().Result;
+                Helper.PrintLine($"异步发送 No.{index} {model.Name}");
             }
         }
     }
