@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using TPLDemo.Model;
 
 namespace TPLDemo.Demo
@@ -12,6 +13,6 @@ namespace TPLDemo.Demo
         public abstract void Run();
 
         protected virtual TModel CreateModel(int index)
-            => new TModel() { Index = index, Name = $"Model-{index}" };
+            => Activator.CreateInstance(typeof(TModel), index) as TModel;
     }
 }

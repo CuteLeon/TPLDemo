@@ -11,7 +11,7 @@ namespace TPLDemo.Demo.BlockDemos.BlockMQDemos
     {
         public override void Run()
         {
-            TransformBlock<int, RunModel> producer = new TransformBlock<int, RunModel>((index) => new RunModel() { Name = $"product_{index}" });
+            TransformBlock<int, RunModel> producer = new TransformBlock<int, RunModel>((index) => new RunModel(index));
             BroadcastBlock<RunModel> publisher = new BroadcastBlock<RunModel>(null);
             BufferBlock<RunModel> subscriber_1 = new BufferBlock<RunModel>();
             BufferBlock<RunModel> subscriber_2 = new BufferBlock<RunModel>();
@@ -20,7 +20,8 @@ namespace TPLDemo.Demo.BlockDemos.BlockMQDemos
 
             producer.LinkTo(publisher);
 
-            publisher.LinkTo(subscriber_1);
+            // 订阅者_1 仅订阅部分消息
+            publisher.LinkTo(subscriber_1, model => model.Index < 5);
             publisher.LinkTo(subscriber_2);
 
             subscriber_1.LinkTo(processer_1);

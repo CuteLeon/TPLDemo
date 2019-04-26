@@ -35,6 +35,7 @@ namespace TPLDemo.Demo
             { "broadcast", new Lazy<IRunableDemo>(() =>  new BroadcastBlockDemo()) },
             { "buffer", new Lazy<IRunableDemo>(() =>  new BufferBlockDemo()) },
             { "pubsub", new Lazy<IRunableDemo>(() =>  new PubSubDemo()) },
+            { "slb", new Lazy<IRunableDemo>(() =>  new SLBDemo()) },
         };
 
         /// <summary>
