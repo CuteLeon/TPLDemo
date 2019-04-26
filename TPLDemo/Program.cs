@@ -14,7 +14,7 @@ namespace TPLDemo
                 {
                     var runable = string.IsNullOrEmpty(input) ?
                         DemoFactory.GetLastRunableDemo() :
-                        DemoFactory.GetRunableDemo(input);
+                        int.TryParse(input, out int index) ? DemoFactory.GetRunableDemo(index) : DemoFactory.GetRunableDemo(input);
 
                     if (runable == null)
                     {

@@ -58,6 +58,23 @@ namespace TPLDemo.Demo
         }
 
         /// <summary>
+        /// 获取演示
+        /// </summary>
+        /// <param name="demoIndex"></param>
+        /// <returns></returns>
+        public static IRunableDemo GetRunableDemo(int demoIndex)
+        {
+            try
+            {
+                return runableDemos[runableDemos.Keys.ElementAt(demoIndex)]?.Value;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
         /// 获取最后一个演示
         /// </summary>
         /// <returns></returns>
