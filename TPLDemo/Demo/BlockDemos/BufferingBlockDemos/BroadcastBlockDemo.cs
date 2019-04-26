@@ -12,6 +12,9 @@ namespace TPLDemo.Demo.BlockDemos.BufferingBlockDemos
         public override void Run()
         {
             BroadcastBlock<RunModel> broadcastBlock = new BroadcastBlock<RunModel>((model) => model);
+            // 广播块实现 发布-订阅模式
+            broadcastBlock.LinkTo(new ActionBlock<RunModel>((model) => Helper.PrintLine($"action_1 : {model.Name}")));
+            broadcastBlock.LinkTo(new ActionBlock<RunModel>((model) => Helper.PrintLine($"action_2 : {model.Name}")));
 
             var models = this.CreateCollection();
             Parallel.ForEach(models, model => broadcastBlock.Post(model));
@@ -20,7 +23,7 @@ namespace TPLDemo.Demo.BlockDemos.BufferingBlockDemos
             Parallel.For(0, 10, (index) =>
             {
                 var model = broadcastBlock.Receive();
-                Helper.PrintLine($"{index} {model.Name}");
+                Helper.PrintLine($"receive {index} {model.Name}");
             });
         }
     }
