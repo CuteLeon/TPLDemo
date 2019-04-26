@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using TPLDemo.Demo.BlockDemos.BlockMQDemos;
+using TPLDemo.Demo.BlockDemos.BlockPipelineDemos;
 using TPLDemo.Demo.BlockDemos.BufferingBlockDemos;
 using TPLDemo.Demo.BlockDemos.ExecutionBlockDemos;
 using TPLDemo.Demo.BlockDemos.GroupingBlockDemos;
@@ -36,6 +37,7 @@ namespace TPLDemo.Demo
             { "buffer", new Lazy<IRunableDemo>(() =>  new BufferBlockDemo()) },
             { "pubsub", new Lazy<IRunableDemo>(() =>  new PubSubDemo()) },
             { "slb", new Lazy<IRunableDemo>(() =>  new SLBDemo()) },
+            { "pipeline", new Lazy<IRunableDemo>(() =>  new BlockPipelineDemo()) },
         };
 
         /// <summary>

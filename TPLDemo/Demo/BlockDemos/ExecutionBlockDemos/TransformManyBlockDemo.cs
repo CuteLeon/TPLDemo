@@ -12,7 +12,7 @@ namespace TPLDemo.Demo.BlockDemos.ExecutionBlockDemos
                 (model) => $"I'm {model.Name}".ToCharArray(),
                 new ExecutionDataflowBlockOptions() { MaxDegreeOfParallelism = 4 });
 
-            var model = this.CreateCollection(1)[0];
+            var model = this.CreateModel(1);
 
             transformManyBlock.Post(model);
 
