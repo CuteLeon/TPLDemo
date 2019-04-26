@@ -4,7 +4,7 @@ using TPLDemo.Model;
 namespace TPLDemo.Demo.BlockDemos.GroupingBlockDemos
 {
     /// <summary>
-    /// 联结块演示
+    /// 联接块演示
     /// </summary>
     public class JoinBlockDemo : RunableDemoBase<RunModel>
     {
