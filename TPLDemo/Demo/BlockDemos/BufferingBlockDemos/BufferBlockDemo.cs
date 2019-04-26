@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 using TPLDemo.Model;
@@ -39,15 +40,31 @@ namespace TPLDemo.Demo.BlockDemos.BufferingBlockDemos
                 var model = bufferBlock.Receive();
                 Helper.PrintLine($"同步接收 No.{index} {model.Name}");
             }
+
             Helper.PrintSplit();
 
             Helper.PrintLine("BufferBlock<> 异步发送");
-            Array.ForEach(models, model => bufferBlock.SendAsync(model));
-            for (int index = 0; index < models.Length; index++)
+            Task.Factory.StartNew(() =>
             {
-                var model = bufferBlock.ReceiveAsync().Result;
-                Helper.PrintLine($"异步发送 No.{index} {model.Name}");
-            }
+                Array.ForEach(models, model =>
+                {
+                    Thread.Sleep(100);
+                    Helper.PrintLine($"异步发送：{model.Name}");
+                    bufferBlock.SendAsync(model);
+                });
+            });
+
+            bufferBlock.OutputAvailableAsync().ContinueWith((pre) =>
+            {
+                if (pre.Result)
+                {
+                    for (int index = 0; index < models.Length; index++)
+                    {
+                        var model = bufferBlock.ReceiveAsync().Result;
+                        Helper.PrintLine($"异步接收 No.{index} {model.Name}");
+                    }
+                }
+            }).Wait();
         }
     }
 }

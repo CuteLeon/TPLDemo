@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 using TPLDemo.Model;
 
@@ -17,7 +18,7 @@ namespace TPLDemo.Demo.BlockDemos.BufferingBlockDemos
             broadcastBlock.LinkTo(new ActionBlock<RunModel>((model) => Helper.PrintLine($"action_2 : {model.Name}")));
 
             var models = this.CreateCollection();
-            Parallel.ForEach(models, model => broadcastBlock.Post(model));
+            Array.ForEach(models, model => broadcastBlock.Post(model));
 
             // BroadcastBlock 只会保留最后一个结果，且不限读取次数
             Parallel.For(0, 10, (index) =>
