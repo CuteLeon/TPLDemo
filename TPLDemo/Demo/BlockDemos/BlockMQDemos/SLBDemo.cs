@@ -24,7 +24,22 @@ namespace TPLDemo.Demo.BlockDemos.BlockMQDemos
             gate.LinkTo(server_3.ActionBlock, (model) => !server_3.Processing);
             gate.LinkTo(server_4.ActionBlock, (model) => !server_4.Processing);
 
+            gate.Completion.ContinueWith((pre) =>
+            {
+                server_1.ActionBlock.Complete();
+                server_2.ActionBlock.Complete();
+                server_3.ActionBlock.Complete();
+                server_4.ActionBlock.Complete();
+            });
+
             Array.ForEach(this.CreateCollection(), model => gate.SendAsync(model));
+
+            gate.Complete();
+            // 等待管道尾部完成
+            server_1.ActionBlock.Completion.Wait();
+            server_2.ActionBlock.Completion.Wait();
+            server_3.ActionBlock.Completion.Wait();
+            server_4.ActionBlock.Completion.Wait();
         }
 
         protected class TaskActionBlock<TModel>

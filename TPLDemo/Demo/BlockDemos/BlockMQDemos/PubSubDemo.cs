@@ -27,7 +27,20 @@ namespace TPLDemo.Demo.BlockDemos.BlockMQDemos
             subscriber_1.LinkTo(processer_1);
             subscriber_2.LinkTo(processer_2);
 
+            // 传播完成消息
+            producer.Completion.ContinueWith((pre) => publisher.Complete());
+
+            publisher.Completion.ContinueWith((pre) => subscriber_1.Complete());
+            publisher.Completion.ContinueWith((pre) => subscriber_2.Complete());
+
+            subscriber_1.Completion.ContinueWith((pre) => processer_1.Complete());
+            subscriber_2.Completion.ContinueWith((pre) => processer_2.Complete());
+
             Enumerable.Range(0, 10).ToList().ForEach(index => producer.SendAsync(index));
+            producer.Complete();
+            // 等待管道尾部完成
+            processer_1.Completion.Wait();
+            processer_2.Completion.Wait();
         }
     }
 }
