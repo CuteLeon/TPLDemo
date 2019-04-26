@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 using TPLDemo.Model;
@@ -21,11 +20,15 @@ namespace TPLDemo.Demo.BlockDemos.BufferingBlockDemos
             Helper.PrintLine("BufferBlock<> 支持并发操作");
             Parallel.ForEach(models, model => bufferBlock.Post(model));
 
-            Parallel.For(0, models.Length, (index) =>
+            for (int index = 0; index < models.Length; index++)
             {
-                var model = bufferBlock.Receive();
-                Helper.PrintLine($"No.{index} {model.Name}");
-            });
+                bufferBlock.ReceiveAsync().ContinueWith((pre) =>
+                {
+                    // ReceiveAsync 可以异步接收，并在 ContinueWith 里处理
+                    var model = pre.Result;
+                    Helper.PrintLine($"异步接收 No.{index} {model.Name}");
+                });
+            }
             Helper.PrintSplit();
 
             Helper.PrintLine("BufferBlock<> 先进先出队列");
@@ -34,7 +37,7 @@ namespace TPLDemo.Demo.BlockDemos.BufferingBlockDemos
             {
                 // Receive() 会导致线程阻塞，直到下次 Post
                 var model = bufferBlock.Receive();
-                Helper.PrintLine($"No.{index} {model.Name}");
+                Helper.PrintLine($"同步接收 No.{index} {model.Name}");
             }
         }
     }
