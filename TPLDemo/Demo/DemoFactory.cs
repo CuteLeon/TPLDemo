@@ -25,7 +25,7 @@ namespace TPLDemo.Demo
             { "compose", new Lazy<IRunableDemo>(() =>  new ComposeTaskDemo()) },
             { "factory", new Lazy<IRunableDemo>(() =>  new TaskFactoryDemo()) },
             { "exception", new Lazy<IRunableDemo>(() =>  new ExceptionDemo()) },
-            { "cancel", new Lazy<IRunableDemo>(() =>  new CancelTaskDemo()) },
+            { "canceltask", new Lazy<IRunableDemo>(() =>  new CancelTaskDemo()) },
             { "writeonce", new Lazy<IRunableDemo>(() =>  new WriteOnceBlockDemo()) },
             { "action", new Lazy<IRunableDemo>(()=> new ActionBlockDemo()) },
             { "transform", new Lazy<IRunableDemo>(()=> new TransformBlockDemo()) },
@@ -38,6 +38,7 @@ namespace TPLDemo.Demo
             { "pubsub", new Lazy<IRunableDemo>(() =>  new PubSubDemo()) },
             { "slb", new Lazy<IRunableDemo>(() =>  new SLBDemo()) },
             { "pipeline", new Lazy<IRunableDemo>(() =>  new BlockPipelineDemo()) },
+            { "cancelblock", new Lazy<IRunableDemo>(() =>  new BlockCancelDemo()) },
         };
 
         /// <summary>

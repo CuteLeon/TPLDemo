@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 using TPLDemo.Model;
 
@@ -39,8 +39,9 @@ namespace TPLDemo.Demo.BlockDemos.BlockPipelineDemos
             }
 
             producer.Complete();
-            customer.Completion.Wait();
-            outcast.Completion.Wait();
+            Task.WaitAll(
+                customer.Completion,
+                outcast.Completion);
         }
     }
 }
