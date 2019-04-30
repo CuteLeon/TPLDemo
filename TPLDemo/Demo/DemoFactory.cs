@@ -7,6 +7,7 @@ using TPLDemo.Demo.BlockDemos.BufferingBlockDemos;
 using TPLDemo.Demo.BlockDemos.ExecutionBlockDemos;
 using TPLDemo.Demo.BlockDemos.GroupingBlockDemos;
 using TPLDemo.Demo.ParallelDemos;
+using TPLDemo.Demo.PLINQ;
 using TPLDemo.Demo.TaskDemos;
 using TPLDemo.Demo.ThreadDemos;
 
@@ -39,6 +40,7 @@ namespace TPLDemo.Demo
             { "slb", (new Lazy<IRunableDemo>(() =>  new SLBDemo()), "MQ负载均衡模式演示") },
             { "pipeline", (new Lazy<IRunableDemo>(() =>  new BlockPipelineDemo()), "块管道演示") },
             { "cancelblock", (new Lazy<IRunableDemo>(() =>  new BlockCancelDemo()), "取消块管道演示") },
+            { "plinq", (new Lazy<IRunableDemo>(() =>  new PLINQDemo()), "PLINQ-并行LINQ演示") },
         };
 
         /// <summary>
