@@ -54,16 +54,17 @@ namespace TPLDemo.Demo.TaskDemos
                 preTask.Wait();
                 Helper.PrintLine("任务管道空闲...");
             });
-
             idleTask.Wait();
+            Helper.PrintSplit();
 
             // 或者这样的任务链
+            // TaskContinuationOptions.RunContinuationsAsynchronously 指定延续任务在同一线程同步执行
             var lastTask = Task.Factory.StartNew(() => Helper.PrintLine("Task_0"))
-                .ContinueWith((preTask) => Helper.PrintLine($"Task_1 ID = {Task.CurrentId}"))
-                .ContinueWith((preTask) => Helper.PrintLine($"Task_2 ID = {Task.CurrentId}"))
-                .ContinueWith((preTask) => Helper.PrintLine($"Task_3 ID = {Task.CurrentId}"))
-                .ContinueWith((preTask) => Helper.PrintLine($"Task_4 ID = {Task.CurrentId}"))
-                .ContinueWith((preTask) => Helper.PrintLine($"Task_5 ID = {Task.CurrentId}"));
+                .ContinueWith((preTask) => Helper.PrintLine($"Task_1 ID = {Task.CurrentId}"), TaskContinuationOptions.RunContinuationsAsynchronously)
+                .ContinueWith((preTask) => Helper.PrintLine($"Task_2 ID = {Task.CurrentId}"), TaskContinuationOptions.RunContinuationsAsynchronously)
+                .ContinueWith((preTask) => Helper.PrintLine($"Task_3 ID = {Task.CurrentId}"), TaskContinuationOptions.RunContinuationsAsynchronously)
+                .ContinueWith((preTask) => Helper.PrintLine($"Task_4 ID = {Task.CurrentId}"), TaskContinuationOptions.RunContinuationsAsynchronously)
+                .ContinueWith((preTask) => Helper.PrintLine($"Task_5 ID = {Task.CurrentId}"), TaskContinuationOptions.RunContinuationsAsynchronously);
             lastTask.Wait();
 
             Helper.PrintLine($"返回的最后一个任务：{lastTask.Id}");

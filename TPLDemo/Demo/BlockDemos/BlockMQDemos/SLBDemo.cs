@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 using TPLDemo.Model;
 
@@ -14,50 +15,55 @@ namespace TPLDemo.Demo.BlockDemos.BlockMQDemos
         {
             BufferBlock<RunModel> gate = new BufferBlock<RunModel>();
 
-            TaskActionBlock<RunModel> server_1 = new TaskActionBlock<RunModel>(model => { Helper.PrintLine($"server_1 开始处理请求：{model.Name}"); Thread.Sleep(1000); Helper.PrintLine($"server_1 处理完成。"); });
-            TaskActionBlock<RunModel> server_2 = new TaskActionBlock<RunModel>(model => { Helper.PrintLine($"server_2 开始处理请求：{model.Name}"); Thread.Sleep(1000); Helper.PrintLine($"server_2 处理完成。"); });
-            TaskActionBlock<RunModel> server_3 = new TaskActionBlock<RunModel>(model => { Helper.PrintLine($"server_3 开始处理请求：{model.Name}"); Thread.Sleep(1000); Helper.PrintLine($"server_3 处理完成。"); });
-            TaskActionBlock<RunModel> server_4 = new TaskActionBlock<RunModel>(model => { Helper.PrintLine($"server_4 开始处理请求：{model.Name}"); Thread.Sleep(1000); Helper.PrintLine($"server_4 处理完成。"); });
+            ActionBlock<RunModel> server_1 = this.CreateServer("鹰眼神射");
+            ActionBlock<RunModel> server_2 = this.CreateServer("暗夜萝莉");
+            ActionBlock<RunModel> server_3 = this.CreateServer("不死鸟之眼");
+            ActionBlock<RunModel> server_4 = this.CreateServer("王者至尊");
 
-            gate.LinkTo(server_1.ActionBlock, (model) => !server_1.Processing);
-            gate.LinkTo(server_2.ActionBlock, (model) => !server_2.Processing);
-            gate.LinkTo(server_3.ActionBlock, (model) => !server_3.Processing);
-            gate.LinkTo(server_4.ActionBlock, (model) => !server_4.Processing);
+            gate.LinkTo(server_1);
+            gate.LinkTo(server_2);
+            gate.LinkTo(server_3);
+            gate.LinkTo(server_4);
 
             gate.Completion.ContinueWith((pre) =>
             {
-                server_1.ActionBlock.Complete();
-                server_2.ActionBlock.Complete();
-                server_3.ActionBlock.Complete();
-                server_4.ActionBlock.Complete();
+                server_1.Complete();
+                server_2.Complete();
+                server_3.Complete();
+                server_4.Complete();
             });
 
             Array.ForEach(this.CreateCollection(), model => gate.SendAsync(model));
 
             gate.Complete();
             // 等待管道尾部完成
-            server_1.ActionBlock.Completion.Wait();
-            server_2.ActionBlock.Completion.Wait();
-            server_3.ActionBlock.Completion.Wait();
-            server_4.ActionBlock.Completion.Wait();
+            Task.WaitAll(
+                server_1.Completion,
+                server_2.Completion,
+                server_3.Completion,
+                server_4.Completion);
         }
 
-        protected class TaskActionBlock<TModel>
-        {
-            private volatile bool processing = false;
-            public bool Processing { get => this.processing; protected set => this.processing = value; }
-
-            public readonly ActionBlock<TModel> ActionBlock;
-
-            public TaskActionBlock(Action<TModel> action)
-                => this.ActionBlock = new ActionBlock<TModel>(
-                    (model) =>
-                    {
-                        this.processing = true;
-                        action.Invoke(model);
-                        this.processing = false;
-                    },
-                    new ExecutionDataflowBlockOptions() { MaxDegreeOfParallelism = 1 });
-        }
+        /// <summary>
+        /// 创建服务器
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        private ActionBlock<RunModel> CreateServer(string name)
+            => new ActionBlock<RunModel>(
+                model =>
+                {
+                    Helper.PrintLine($"服务器 {name} 开始处理请求：{model.Name}");
+                    Thread.Sleep(Helper.Random.Next(300, 1500));
+                    Helper.PrintLine($"服务器 {name} 处理完成：{model.Name}");
+                },
+                /* 使用 ExecutionDataflowBlockOptions 间接实现 非贪婪 模式：繁忙状态下，不再接受消息；
+                 * 否则服务器会运行在贪婪模式：繁忙状态下依然抢收消息
+                 */
+                new ExecutionDataflowBlockOptions()
+                {
+                    BoundedCapacity = 1,
+                    MaxDegreeOfParallelism = 1
+                });
     }
 }

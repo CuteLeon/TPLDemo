@@ -13,6 +13,10 @@ namespace TPLDemo.Demo.ThreadDemos
 
         public override void Run()
         {
+            /* 类似操作：
+            Thread.VolatileRead();
+            Thread.VolatileWrite();
+             */
             Enumerable.Range(1, 100).AsParallel().ForAll((index) =>
             {
                 Helper.PrintLine($"{Interlocked.Read(ref Count)} + {index} = {Interlocked.Add(ref Count, index)}");

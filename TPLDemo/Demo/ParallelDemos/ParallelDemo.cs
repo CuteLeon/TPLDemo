@@ -14,7 +14,7 @@ namespace TPLDemo.Demo.ParallelDemos
     {
         public override void Run()
         {
-            var models = this.CreateCollection();
+            var models = this.CreateCollection(30);
 
             Parallel.For(10, 30, (index) =>
             {

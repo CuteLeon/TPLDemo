@@ -30,10 +30,9 @@ namespace TPLDemo.Demo.BlockDemos.BlockPipelineDemos
             producer.Completion.ContinueWith((pre) => packager.Complete());
             packager.Completion.ContinueWith((pre) => { customer.Complete(); outcast.Complete(); });
 
-            var random = new Random();
             for (int index = 0; index < 5; index++)
             {
-                int count = random.Next(20);
+                int count = Helper.Random.Next(20);
                 Helper.PrintLine($"生产第 {index} 批产品：{count} 个");
                 producer.Post(count);
             }

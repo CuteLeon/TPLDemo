@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using TPLDemo.Demo;
 
 namespace TPLDemo
@@ -40,7 +41,10 @@ namespace TPLDemo
             Helper.PrintSplit();
             Helper.PrintLine("<<< TPL >>>");
             Helper.PrintSplit();
-            Helper.PrintLine($"输入 Demo ID 以执行：\n\t· {string.Join("\n\t· ", DemoFactory.GetDemoIDs())}\n\t或输出 exit 以退出。\n  请输入：");
+            var demoKeys = DemoFactory.GetDemoIDs();
+            var demoDescriptions = DemoFactory.GetDemoDescriptions();
+            int maxKeyLength = demoKeys.Max(key => key.Length);
+            Helper.PrintLine($"输入 Demo 的 数字序号或英文编码 以执行：\n\t{string.Join("\n\t", Enumerable.Range(0, demoKeys.Length).Select(index => $"{index.ToString().PadLeft(2)} · {demoKeys[index].PadRight(maxKeyLength)} —> {demoDescriptions[index]}"))}\n\t或输出 exit 以退出。\n  请输入：");
             return Console.ReadLine();
         }
     }
