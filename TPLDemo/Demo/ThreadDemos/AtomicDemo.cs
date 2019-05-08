@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using TPLDemo.Model;
 
 namespace TPLDemo.Demo.ThreadDemos
@@ -21,8 +22,16 @@ namespace TPLDemo.Demo.ThreadDemos
             {
                 Helper.PrintLine($"{Interlocked.Read(ref Count)} + {index} = {Interlocked.Add(ref Count, index)}");
             });
-
             Helper.PrintLine(Count.ToString());
+            Helper.PrintSplit();
+
+            // 替换变量并返回原值
+            long count = 0;
+            Parallel.For(0, 10, (index) =>
+            {
+                long original = Interlocked.Exchange(ref count, 1);
+                Helper.PrintLine(original == 0 ? "暂未步入" : "已经步入过了");
+            });
         }
     }
 }

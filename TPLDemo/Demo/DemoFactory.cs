@@ -19,7 +19,6 @@ namespace TPLDemo.Demo
         private static readonly Dictionary<string, (Lazy<IRunableDemo> RunableDemo, string Description)> runableDemos = new Dictionary<string, (Lazy<IRunableDemo> RunableDemo, string Description)>
         {
             { "parallel", (new Lazy<IRunableDemo>(() =>  new ParallelDemo()), "并行计算演示") },
-            { "atomic", (new Lazy<IRunableDemo>(() =>  new AtomicDemo()), "原子操作演示") },
             { "task", (new Lazy<IRunableDemo>(() =>  new TaskDemo()), "Task-任务类演示") },
             { "continu", (new Lazy<IRunableDemo>(() =>  new TaskContinuationDemo()), "延续任务演示") },
             { "child", (new Lazy<IRunableDemo>(() =>  new ChildTaskDemo()), "子任务演示") },
@@ -43,6 +42,7 @@ namespace TPLDemo.Demo
             { "cancelblock", (new Lazy<IRunableDemo>(() =>  new BlockCancelDemo()), "取消块管道演示") },
             { "plinq", (new Lazy<IRunableDemo>(() =>  new PLINQDemo()), "PLINQ-并行LINQ演示") },
             { "invoke", (new Lazy<IRunableDemo>(() =>  new InvokeDemo()), "Invoke-调用演示") },
+            { "atomic", (new Lazy<IRunableDemo>(() =>  new AtomicDemo()), "原子操作演示") },
         };
 
         /// <summary>
