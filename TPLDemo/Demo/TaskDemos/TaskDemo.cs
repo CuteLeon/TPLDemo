@@ -77,8 +77,11 @@ namespace TPLDemo.Demo.TaskDemos
             result = await this.ComplexCalculationTask(model);
             Helper.PrintLine($"得到结果-1：{result}");
 
-            // 对于非 Task<> 类型的返回值，需要使用 Task.Run 包装下，
-            result = await Task.Run(() => this.ComplexCalculation(model));
+            /* 对于非 Task<> 类型的返回值，需要使用 Task.Run 包装下，
+             * await Task.Run().ConfigureAwait(false); 防止死锁；
+             */
+            result = await Task.Run(() => this.ComplexCalculation(model))
+                .ConfigureAwait(false);
             Helper.PrintLine($"得到结果-2：{result}");
         }
 
